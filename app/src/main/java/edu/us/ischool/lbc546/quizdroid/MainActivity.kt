@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         val listView: ListView = findViewById(R.id.list)
         listView.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, topics)
         listView.setOnItemClickListener { _, _, position, _ ->
-            val intent = Intent(this, topic::class.java)
+            val intent = Intent(this, control::class.java)
             intent.putExtra("position", listView.getItemAtPosition(position).toString())
             startActivity(intent)
         }
