@@ -1,3 +1,48 @@
 <resources>
     <string name="app_name">quizdroid</string>
+
+    <string name="math">Math</string>
+    <string name="physics">Physics</string>
+    <string name="marvel">Marvel Super Heroes</string>
+
+    <string name="submit">Submit</string>
+    <string name="start">Begin!</string>
+
+    <string name="physics_description">
+        Physics is a natural science that studies matter and its motion and behavior through space and time.
+    </string>
+
+    <string name="math_description">
+        Mathematics is the study of such topics as quantity, structure, space, and change.</string>
+
+    <string name="marvel_description">Marvel section contains questions about Marvel\'s super heroes</string>
+
+    <string name="num">3 Questions</string>
+
+    <string name="mq1">What\'s 0 + 1?</string>
+    <string name="ma1">1</string>
+
+    <string name="mq2">What\'s 1 + 1?</string>
+    <string name="ma2">2</string>
+
+    <string name="mq3">What\'s 5 - 2?</string>
+    <string name="ma3">3</string>
+
+    <string name="pq1">What\'s the formula for E?</string>
+    <string name="pa1">mc^2</string>
+
+    <string name="pq2">What\'s the unit for weight?</string>
+    <string name="pa2">Gram</string>
+
+    <string name="pq3">What is g?</string>
+    <string name="pa3">Gravity</string>
+
+    <string name="mwq1">Who is Captain America?</string>
+    <string name="mwa1">Steve Rogers</string>
+
+    <string name="mwq2">Who grows really big when he is angry?</string>
+    <string name="mwa2">Hulk</string>
+
+    <string name="mwq3">Who\'s a billionaire?</string>
+    <string name="mwa3">Tony Stark</string>
 </resources>
