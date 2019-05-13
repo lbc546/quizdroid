@@ -1,16 +1,17 @@
 package edu.us.ischool.lbc546.quizdroid
 
-import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 
-class quiz : AppCompatActivity() {
+class quiz : Fragment() {
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.quiz)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val mathQuestions = arrayOf(getString(R.string.mq1), getString(R.string.mq2), getString(R.string.mq3))
         val physicsQuestions = arrayOf(getString(R.string.pq1), getString(R.string.pq2), getString(R.string.pq3))
@@ -18,29 +19,22 @@ class quiz : AppCompatActivity() {
         val mathChoices = arrayOf(getString(R.string.ma3), getString(R.string.ma2), getString(R.string.ma1))
         val physicsChoices = arrayOf(getString(R.string.pa3), getString(R.string.pa2), getString(R.string.pa1))
         val marvelChoices = arrayOf(getString(R.string.mwa1), getString(R.string.mwa2), getString(R.string.mwa3))
-        val group : RadioGroup = findViewById(R.id.choices)
+
+        val rootView : View = inflater.inflate(R.layout.quiz, container, false)
+        val group : RadioGroup = rootView.findViewById(R.id.choices)
         fun addButtons (choices: Array<String>) {
             for (choice in choices) {
-                val button = RadioButton(this)
+                val button = RadioButton(context)
                 button.text = choice
                 group.addView(button)
             }
         }
-        var questionLine : TextView = findViewById(R.id.question)
-        var question = 0
-        var correct = 0
-        var topic = ""
+        var questionLine : TextView = rootView.findViewById(R.id.question)
+        var fragmentManager : FragmentManager = activity!!.supportFragmentManager
 
-        if (savedInstanceState != null) {
-            topic = savedInstanceState.getSerializable("topic").toString()
-            question = savedInstanceState.getInt("question")
-            correct = savedInstanceState.getInt("correct")
-        } else {
-            val extras: Bundle = intent.extras
-            topic = extras.getString("topic")
-            question = extras.getInt("question")
-            correct = extras.getInt("correct")
-        }
+        var topic= arguments!!.getString("topic")
+        var question = arguments!!.getInt("question")
+        var correct = arguments!!.getInt("correct")
 
         when (topic) {
             "Math" -> {
@@ -57,23 +51,32 @@ class quiz : AppCompatActivity() {
             }
         }
 
-        val submit : Button = findViewById(R.id.submit)
+        val submit : Button = rootView.findViewById(R.id.submit)
         submit.setOnClickListener{
-            if (findViewById<Button>(group.checkedRadioButtonId) != null) {
-                val button: Button = findViewById(group.checkedRadioButtonId)
-                val intent = Intent(this, answer::class.java)
-                intent.putExtra("topic", topic)
-                intent.putExtra("question", question)
-                intent.putExtra("answer", button.text.toString())
-                intent.putExtra("correct", correct)
-                startActivity(intent)
+            if (rootView.findViewById<Button>(group.checkedRadioButtonId) != null) {
+                val button: Button = rootView.findViewById(group.checkedRadioButtonId)
+                val ft = fragmentManager.beginTransaction()
+                val fragment : Fragment = answer()
+                val bundle = Bundle()
+                bundle.putString("topic", topic)
+                bundle.putInt("question", question)
+                bundle.putString("answer", button.text.toString())
+                bundle.putInt("correct", correct)
+                fragment.arguments = bundle
+                ft.replace(R.id.holder, fragment)
+                ft.commit()
             } else {
-                val intent = Intent(this, quiz::class.java)
-                intent.putExtra("topic", topic)
-                intent.putExtra("question", question)
-                intent.putExtra("correct", correct)
-                startActivity(intent)
+                val ft = fragmentManager.beginTransaction()
+                val fragment : Fragment = quiz()
+                val bundle = Bundle()
+                bundle.putString("topic", topic)
+                bundle.putInt("question", question)
+                bundle.putInt("correct", correct)
+                fragment.arguments = bundle
+                ft.replace(R.id.holder, fragment)
+                ft.commit()
             }
         }
+        return rootView
     }
 }

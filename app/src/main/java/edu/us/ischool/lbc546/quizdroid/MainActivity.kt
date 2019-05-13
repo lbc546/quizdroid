@@ -12,10 +12,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val topics = arrayOf(getString(R.string.math), getString(R.string.physics), getString(R.string.marvel))
+        val topics = arrayOf("Math", "Physics", "Marvel Super Heroes")
         val listView: ListView = findViewById(R.id.list)
         listView.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, topics)
-        listView.setOnItemClickListener { _, _, position, _ ->
+        listView.setOnItemClickListener{ _, _, position, _ ->
             val intent = Intent(this, control::class.java)
             intent.putExtra("position", listView.getItemAtPosition(position).toString())
             startActivity(intent)

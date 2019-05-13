@@ -1,26 +1,25 @@
 package edu.us.ischool.lbc546.quizdroid
 
-import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 
-class topic : AppCompatActivity() {
+class topic : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.topic)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val topicLine: TextView = findViewById(R.id.topic_line)
-        val overview: TextView = findViewById(R.id.description)
+        val rootView: View = inflater.inflate(R.layout.topic, container, false)
+        val topicLine: TextView = rootView.findViewById(R.id.topic_line)
+        val topic = arguments!!.getString("position")
+        val overview: TextView = rootView.findViewById(R.id.description)
+        var fragmentManager: FragmentManager = activity!!.supportFragmentManager
 
-        if (savedInstanceState != null) {
-            topicLine.text = savedInstanceState.getSerializable("position").toString()
-        } else {
-            val extras: Bundle = intent.extras
-            topicLine.text = extras.getString("position")
-        }
+        topicLine.text = topic
 
         when (topicLine.text) {
             "Math" -> overview.text = getString(R.string.math_description)
@@ -28,13 +27,20 @@ class topic : AppCompatActivity() {
             "Marvel Super Heroes" -> overview.text = getString(R.string.marvel_description)
         }
 
-        val begin: Button = findViewById(R.id.start)
+        val begin: Button = rootView.findViewById(R.id.start)
         begin.setOnClickListener {
-            val intent = Intent(this, quiz::class.java)
-            intent.putExtra("topic", topicLine.text)
-            intent.putExtra("question", 0)
-            intent.putExtra("correct", 0)
-            startActivity(intent)
+            val fragment: Fragment = quiz()
+            val ft = fragmentManager.beginTransaction()
+            var bundle = Bundle()
+            bundle.putString("topic", topic)
+            bundle.putInt("question", 0)
+            bundle.putInt("correct", 0)
+            fragment.arguments = bundle
+            ft.replace(R.id.holder, fragment)
+            ft.addToBackStack(null)
+            ft.commit()
         }
+        return rootView
     }
+
 }
